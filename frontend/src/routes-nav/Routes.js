@@ -16,6 +16,10 @@ function AppRoutes() {
 
                 <Route path="*" element={<Homepage />} ></Route>
 
+                <Route path="/recipes" element={<RecipeList recipes={recipes} />} ></Route>
+
+                <Route path="/shopping" element={<ShoppingList />}></Route>
+
                 <Route path="*" element={() => {
                     navigate("/");
                     return null;
