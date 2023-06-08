@@ -7,6 +7,7 @@ import Homepage from "../homepage/Homepage";
  */
 
 function AppRoutes() {
+    const navigate = useNavigate();
     return (
 
         // need to edit this piece 
@@ -16,9 +17,9 @@ function AppRoutes() {
 
                 <Route path="*" element={<Homepage />} ></Route>
 
-                <Route path="/recipes" element={<RecipeList recipes={recipes} />} ></Route>
+                {/* <Route path="/recipes" element={<RecipeList recipes={recipes} />} ></Route>
 
-                <Route path="/shopping" element={<ShoppingList />}></Route>
+                <Route path="/shopping" element={<ShoppingList />}></Route> */}
 
                 <Route path="*" element={() => {
                     navigate("/");
