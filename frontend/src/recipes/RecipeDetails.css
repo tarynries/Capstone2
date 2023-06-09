@@ -1,0 +1,44 @@
+.recipe-detail {
+    text-align: left;
+}
+
+.recipe-detail h2 {
+    margin-bottom: 1rem;
+}
+
+.recipe-detail img {
+    max-width: 100%;
+    margin-bottom: 1rem;
+}
+
+.recipe-detail p {
+    margin-bottom: 0.5rem;
+}
+
+.recipe-detail h4 {
+    margin-bottom: 0.5rem;
+}
+
+.recipe-detail ul,
+.recipe-detail ol {
+    text-align: left;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+.recipe-detail li {
+    margin-bottom: 0.25rem;
+}
+
+.recipe-detail button {
+    padding: 0.5rem 1rem;
+    background-color: #fca311;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.recipe-detail button:hover {
+    background-color: #f78c00;
+}
