@@ -1,5 +1,7 @@
 const express = require('express');
 const config = require('./config');
+const { NotFoundError } = require("./expressError");
+
 
 const recipeRoutes = require("./routes/recipes");
 

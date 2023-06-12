@@ -7,8 +7,8 @@ const { NotFoundError } = require("../expressError");
 const router = express.Router();
 
 
-const BASE_URL = 'https://api.spoonacular.com'; // Base URL for the API requests
-const API_KEY = '66a73a7cd6c84d138abe08a3b2ded76e';
+// const BASE_URL = 'https://api.spoonacular.com'; // Base URL for the API requests
+// const API_KEY = '66a73a7cd6c84d138abe08a3b2ded76e';
 
 
 /** GET /recipes => { recipes: [{ recipe1 }, { recipe2 }, ...] }
@@ -32,10 +32,16 @@ router.get("/recipes", async function (req, res, next) {
             image: recipe.image,
             // Add any other necessary fields you want to include in the response
         }));
+
+        // Store the recipes in the database
+        for (const recipe of recipes) {
+            await Recipe.create(recipe);
+        }
         return res.json({ recipes });
     } catch (err) {
         if (err.response && err.response.status === 404) {
-            return res.status(404).json({ error: "Recipe not found" });
+            throw new NotFoundError("Recipe not found");
+            // return res.status(404).json({ error: "Recipe not found" });
         }
         return next(err);
     }
