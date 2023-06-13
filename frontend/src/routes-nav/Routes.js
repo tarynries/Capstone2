@@ -8,45 +8,10 @@ import RecipeDetails from "../recipes/RecipeDetails";
  *
  */
 
+
+// could add more static data with more details to work with just front end 
 function AppRoutes() {
     const navigate = useNavigate();
-    const recipeData = [
-        {
-            id: 1,
-            title: "Recipe 1",
-            description: "This is recipe 1",
-            ingredients: ["Ingredient 1", "Ingredient 2", "Ingredient 3"],
-            instructions: [
-                "Step 1: Do this.",
-                "Step 2: Do that.",
-                "Step 3: Complete the recipe.",
-            ],
-        },
-        {
-            id: 2,
-            title: "Recipe 2",
-            description: "This is recipe 2",
-            ingredients: ["Ingredient A", "Ingredient B", "Ingredient C"],
-            instructions: [
-                "Step 1: Do this.",
-                "Step 2: Do that.",
-                "Step 3: Complete the recipe.",
-            ],
-        },
-        {
-            id: 3,
-            title: "Recipe 3",
-            description: "This is recipe 3",
-            ingredients: ["Ingredient X", "Ingredient Y", "Ingredient Z"],
-            instructions: [
-                "Step 1: Do this.",
-                "Step 2: Do that.",
-                "Step 3: Complete the recipe.",
-            ],
-        },
-        // Add more recipe objects as needed
-    ];
-
 
     return (
 
@@ -57,9 +22,9 @@ function AppRoutes() {
 
                 <Route path="*" element={<Homepage />} ></Route>
 
-                <Route path="/recipes" element={<RecipeList recipes={recipeData} />} ></Route>
+                <Route path="/recipes" element={<RecipeList />} ></Route>
 
-                <Route path="/recipes/:id" element={<RecipeDetails recipes={recipeData} />} ></Route>
+                <Route path="/recipes/:id" element={<RecipeDetails />} ></Route>
 
                 {/* <Route path="/shopping" element={<ShoppingList />}></Route> */}
 

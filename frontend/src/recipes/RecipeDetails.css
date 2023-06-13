@@ -1,5 +1,7 @@
 .recipe-detail {
     text-align: left;
+    padding: 2rem;
+    border-radius: 4px;
 }
 
 .recipe-detail h2 {

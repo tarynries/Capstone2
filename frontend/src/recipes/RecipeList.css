@@ -1,5 +1,9 @@
 .recipe-list {
     text-align: left;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .recipe-list h2 {
@@ -8,6 +12,10 @@
 
 .recipe-list div {
     margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .recipe-list h3 {

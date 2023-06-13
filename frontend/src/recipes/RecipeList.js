@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./RecipeList.css"
 
-function RecipeList({ recipes }) {
+function RecipeList() {
+    const [recipes, setRecipes] = useState([]);
+
+    useEffect(() => {
+        fetch("/recipes")
+            .then((response) => {
+                console.log("Response data:", response.data);
+                return response.json();
+            })
+            .then((data) => {
+                setRecipes(data.recipes);
+            })
+            .catch((error) => {
+                console.error("Error fetching recipes:", error);
+            });
+    }, []);
+
+
     return (
         <div className="recipe-list">
-            <h2>Recipe List</h2>
+            <h2>All Recipes</h2>
             {recipes.map((recipe) => (
                 <div key={recipe.id}>
                     <h3>{recipe.title}</h3>

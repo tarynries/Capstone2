@@ -1,19 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./RecipeDetails.css"
 
-function RecipeDetails({ recipes }) {
+function RecipeDetails() {
     const { id } = useParams();
-    const recipe = recipes.find((recipe) => recipe.id === Number(id));
     const navigate = useNavigate();
+    const [recipe, setRecipe] = useState(null);
 
-    if (!recipe) {
-        return <div>Recipe not found!</div>;
-    }
+    useEffect(() => {
+        fetch(`/recipes/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setRecipe(data.recipe);
+            })
+            .catch((error) => {
+                console.error("Error fetching recipe details:", error);
+            });
+    }, [id]);
 
     const goBack = () => {
         navigate("/recipes");
     };
+
+    if (!recipe) {
+        return <div>Loading...</div>;
+    }
+
 
     return (
         <div className="recipe-detail">
