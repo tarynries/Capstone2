@@ -1,8 +1,9 @@
 const express = require("express");
+const api = require("../api");
 const Recipe = require("../models/recipes");
-const axios = require("axios");
-const api = require("../api")
 const { NotFoundError } = require("../expressError");
+// const axios = require("axios");
+
 
 const router = express.Router();
 
@@ -15,13 +16,17 @@ const router = express.Router();
  *
  * Returns a list of all recipes.
  **/
-router.get("/recipes", async function (req, res, next) {
+router.get("/", async function (req, res, next) {
+    // console.log("GET /recipes request received");
     try {
         const response = await api.get("/recipes/random", {
             params: {
+                // sort: "random",
                 number: 10, // Specify the number of recipes you want to fetch
             },
+
         });
+        console.log("response", response);
         //console statements for data 
         //transform and clean data - only use whats needed 
 
@@ -35,8 +40,13 @@ router.get("/recipes", async function (req, res, next) {
 
         // Store the recipes in the database
         for (const recipe of recipes) {
-            await Recipe.create(recipe);
+            await db.query(
+                `INSERT INTO recipes (title, description, image_url)
+               VALUES ($1, $2, $3)`,
+                [recipe.title, recipe.description, recipe.image]
+            );
         }
+
         return res.json({ recipes });
     } catch (err) {
         if (err.response && err.response.status === 404) {
@@ -51,7 +61,7 @@ router.get("/recipes", async function (req, res, next) {
  *
  * Returns the recipe with the given ID.
  **/
-router.get("/recipes/:id", async function (req, res, next) {
+router.get("/:id", async function (req, res, next) {
     try {
         const recipeId = req.params.id;
 
