@@ -6,9 +6,10 @@ function RecipeDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [recipe, setRecipe] = useState(null);
+    console.log(useParams());
 
     useEffect(() => {
-        fetch(`/recipes/${id}`)
+        fetch(`http://localhost:3001/recipes/${id}`)
             .then((response) => response.json())
             .then((data) => {
                 setRecipe(data.recipe);
