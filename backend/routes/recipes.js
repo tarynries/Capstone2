@@ -9,9 +9,6 @@ const { NotFoundError } = require("../expressError");
 const router = express.Router();
 
 
-// const BASE_URL = 'https://api.spoonacular.com'; // Base URL for the API requests
-// const API_KEY = '66a73a7cd6c84d138abe08a3b2ded76e';
-
 
 /** GET /recipes => { recipes: [{ recipe1 }, { recipe2 }, ...] }
  *
@@ -25,34 +22,44 @@ router.get("/", async function (req, res, next) {
                 // sort: "random",
                 number: 10, // Specify the number of recipes you want to fetch
             },
-
+            headers: {
+                Accept: "application/json", // Specify that you expect a JSON response
+            },
         });
         console.log("response", response);
-        //console statements for data 
-        //transform and clean data - only use whats needed 
+
 
         // Extract the necessary data from the Spoonacular API response
-        const recipes = response.data.recipes.map((recipe) => ({
+        const apiRecipes = response.data.recipes.map((recipe) => ({
+            id: recipe.id,
             title: recipe.title,
-            description: recipe.summary,
+            description: recipe.summary
+                .replace(/<\/?b>/g, "")
+                .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, ""),
             image: recipe.image,
-            // Add any other necessary fields you want to include in the response
         }));
 
+
         // Store the recipes in the database
-        for (const recipe of recipes) {
+        for (const recipe of apiRecipes) {
             await db.query(
-                `INSERT INTO recipes (title, description, image_url)
-               VALUES ($1, $2, $3)`,
-                [recipe.title, recipe.description, recipe.image]
+                `INSERT INTO recipes (id, title, description, image)
+               VALUES ($1, $2, $3, $4)`,
+                [recipe.id, recipe.title, recipe.description, recipe.image]
             );
         }
 
-        return res.json({ recipes });
+        // Fetch recipes from the database
+        const dbRecipes = await db.query("SELECT * FROM recipes");
+
+        // Set the Cache-Control header to disable caching
+        res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+
+        return res.json({ apiRecipes, dbRecipes });
+
     } catch (err) {
         if (err.response && err.response.status === 404) {
             throw new NotFoundError("Recipe not found");
-            // return res.status(404).json({ error: "Recipe not found" });
         }
         return next(err);
     }
@@ -64,13 +71,14 @@ router.get("/", async function (req, res, next) {
  **/
 router.get("/:id", async function (req, res, next) {
     try {
-        const recipeId = req.params.id;
+        const id = req.params.id;
 
         // Make a request to the Spoonacular API to fetch recipe details
-        const response = await api.get(`/recipes/${recipeId}/information`);
+        const response = await api.get(`/recipes/${id}/information`);
 
         // Extract the necessary data from the Spoonacular API response
         const recipe = {
+            id: response.data.id,
             title: response.data.title,
             description: response.data.summary,
             image: response.data.image,

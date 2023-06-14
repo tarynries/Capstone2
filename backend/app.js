@@ -1,5 +1,6 @@
 const express = require('express');
 const { NotFoundError } = require("./expressError");
+const cors = require("cors");
 
 
 const recipeRoutes = require("./routes/recipes");
@@ -9,6 +10,7 @@ const app = express();
 // Set up middleware, routes, and other configurations here
 
 app.use(express.json());
+app.use(cors({ credentials: true }));
 app.use("/recipes", recipeRoutes);
 
 // console.log("Routes registered:", app._router.stack);
