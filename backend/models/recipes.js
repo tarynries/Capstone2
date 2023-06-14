@@ -14,6 +14,19 @@ class Recipe {
         return result.rows;
     }
 
+    /** Get all breakfast recipes */
+    static async getBreakfast() {
+        const result = await db.query(
+            `SELECT r.recipe_id, r.title, r.description, r.image_url, r.meal_category_id, mc.name AS meal_category_name
+       FROM recipes AS r
+       JOIN meal_categories AS mc ON r.meal_category_id = mc.meal_category_id
+       WHERE mc.name = 'breakfast'
+       ORDER BY r.title`
+        );
+
+        return result.rows;
+    }
+
 
     /** Get recipe by ID */
     static async getById(id) {
@@ -32,8 +45,7 @@ class Recipe {
 
         return recipe;
     }
-
-
 }
+
 
 module.exports = Recipe;
