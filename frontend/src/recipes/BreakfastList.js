@@ -41,6 +41,9 @@ function BreakfastRecipeList() {
             <Link to="/">
                 <button>Homepage</button>
             </Link>
+            <Link to="/recipes">
+                <button>All Recipes</button>
+            </Link>
         </div>
     );
 }

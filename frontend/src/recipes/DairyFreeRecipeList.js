@@ -17,7 +17,7 @@ function DairyFreeRecipeList() {
                 }
             })
             .catch((error) => {
-                console.error("Error fetching gluten-free recipes:", error);
+                console.error("Error fetching dairy-free recipes:", error);
             });
     }, []);
 
@@ -40,6 +40,9 @@ function DairyFreeRecipeList() {
             <br />
             <Link to="/">
                 <button>Homepage</button>
+            </Link>
+            <Link to="/recipes">
+                <button>All Recipes</button>
             </Link>
         </div>
     );

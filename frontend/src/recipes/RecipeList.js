@@ -28,9 +28,6 @@ function RecipeList() {
             <nav>
                 <ul>
                     <li>
-                        <Link to="/">All Recipes</Link>
-                    </li>
-                    <li>
                         <Link to="/recipes/gluten">Gluten-Free Recipes</Link>
                     </li>
                     <li>
