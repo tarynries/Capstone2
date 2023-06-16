@@ -64,6 +64,11 @@ router.get("/", async function (req, res, next) {
     }
 });
 
+/** GET /recipes/gluten => { recipes: [{ recipe1 }, { recipe2 }, ...] }
+ *
+ * Returns a list of gluten free recipes.
+ **/
+
 router.get("/gluten", async function (req, res, next) {
     try {
         console.log("Fetching gluten free recipes...");
@@ -115,6 +120,168 @@ router.get("/gluten", async function (req, res, next) {
     }
 });
 
+/** GET /recipes/dairy => { recipes: [{ recipe1 }, { recipe2 }, ...] }
+ *
+ * Returns a list of dairy free recipes.
+ **/
+
+router.get("/dairy", async function (req, res, next) {
+    try {
+        console.log("Fetching dairy free recipes...");
+        const response = await api.get("/recipes/complexSearch", {
+            params: {
+                intolerances: "dairy",
+                number: 20,
+            },
+            headers: {
+                Accept: "application/json",
+            },
+        });
+        console.log("Response received:", response.data);
+
+        const apiRecipes = response.data.results.map((recipe) => ({
+            id: recipe.id,
+            title: recipe.title,
+            description: recipe.summary
+                ? recipe.summary
+                    .replace(/<\/?b>/g, "")
+                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
+                : "No description available",
+            image: recipe.image,
+        }));
+
+        console.log("API recipes:", apiRecipes);
+
+        for (const recipe of apiRecipes) {
+            await db.query(
+                `INSERT INTO recipes (id, title, description, image)
+           VALUES ($1, $2, $3, $4)`,
+                [recipe.id, recipe.title, recipe.description, recipe.image]
+            );
+        }
+
+        const dbRecipes = await db.query("SELECT * FROM recipes");
+        console.log("DB recipes:", dbRecipes.rows);
+
+        res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+
+        return res.json({ apiRecipes, dbRecipes });
+    } catch (err) {
+        if (err.response && err.response.status === 404) {
+            throw new NotFoundError("Recipe not found");
+        }
+        return next(err);
+    }
+});
+
+/** GET /recipes/breakfast => { recipes: [{ recipe1 }, { recipe2 }, ...] }
+ *
+ * Returns a list of breakfast recipes.
+ **/
+
+router.get("/breakfast", async function (req, res, next) {
+    try {
+        console.log("Fetching breakfast recipes...");
+        const response = await api.get("/recipes/complexSearch", {
+            params: {
+                type: "breakfast",
+                number: 10,
+            },
+            headers: {
+                Accept: "application/json",
+            },
+        });
+        console.log("Response received:", response.data);
+
+        const apiRecipes = response.data.results.map((recipe) => ({
+            id: recipe.id,
+            title: recipe.title,
+            description: recipe.summary
+                ? recipe.summary
+                    .replace(/<\/?b>/g, "")
+                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
+                : "No description available",
+            image: recipe.image,
+        }));
+
+        console.log("API recipes:", apiRecipes);
+
+        for (const recipe of apiRecipes) {
+            await db.query(
+                `INSERT INTO recipes (id, title, description, image)
+           VALUES ($1, $2, $3, $4)`,
+                [recipe.id, recipe.title, recipe.description, recipe.image]
+            );
+        }
+
+        const dbRecipes = await db.query("SELECT * FROM recipes");
+        console.log("DB recipes:", dbRecipes.rows);
+
+        res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+
+        return res.json({ apiRecipes, dbRecipes });
+    } catch (err) {
+        if (err.response && err.response.status === 404) {
+            throw new NotFoundError("Recipe not found");
+        }
+        return next(err);
+    }
+});
+
+
+/** GET /recipes/maincourse => { recipes: [{ recipe1 }, { recipe2 }, ...] }
+ *
+ * Returns a list of breakfast recipes.
+ **/
+
+router.get("/maincourse", async function (req, res, next) {
+    try {
+        console.log("Fetching main course recipes...");
+        const response = await api.get("/recipes/complexSearch", {
+            params: {
+                type: "main course",
+                number: 10,
+            },
+            headers: {
+                Accept: "application/json",
+            },
+        });
+        console.log("Response received:", response.data);
+
+        const apiRecipes = response.data.results.map((recipe) => ({
+            id: recipe.id,
+            title: recipe.title,
+            description: recipe.summary
+                ? recipe.summary
+                    .replace(/<\/?b>/g, "")
+                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
+                : "No description available",
+            image: recipe.image,
+        }));
+
+        console.log("API recipes:", apiRecipes);
+
+        for (const recipe of apiRecipes) {
+            await db.query(
+                `INSERT INTO recipes (id, title, description, image)
+           VALUES ($1, $2, $3, $4)`,
+                [recipe.id, recipe.title, recipe.description, recipe.image]
+            );
+        }
+
+        const dbRecipes = await db.query("SELECT * FROM recipes");
+        console.log("DB recipes:", dbRecipes.rows);
+
+        res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+
+        return res.json({ apiRecipes, dbRecipes });
+    } catch (err) {
+        if (err.response && err.response.status === 404) {
+            throw new NotFoundError("Recipe not found");
+        }
+        return next(err);
+    }
+});
 
 /** GET /recipes/:id => { recipe }
  *
@@ -160,8 +327,6 @@ router.get("/:id", async function (req, res, next) {
     }
 });
 
-//get breakfast recipes 
-//returns a list of breakfast recipes 
 
 
 // Other route handlers for recipe routes...
