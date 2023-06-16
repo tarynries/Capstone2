@@ -33,6 +33,15 @@ function RecipeList() {
                     <li>
                         <Link to="/recipes/gluten">Gluten-Free Recipes</Link>
                     </li>
+                    <li>
+                        <Link to="/recipes/dairy">Dairy-Free Recipes</Link>
+                    </li>
+                    <li>
+                        <Link to="/recipes/breakfast">Breakfast Recipes</Link>
+                    </li>
+                    <li>
+                        <Link to="/recipes/maincourse">Main Course Recipes</Link>
+                    </li>
                 </ul>
             </nav>
             <div className="recipe-list">
