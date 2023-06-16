@@ -24,25 +24,37 @@ function RecipeList() {
 
     console.log(recipes);
     return (
-        <div className="recipe-list">
-            <h2>All Recipes</h2>
-            {recipes.length > 0 ? (
-                recipes.map((recipe) => (
-                    <div key={recipe.id}>
-                        <h3>{recipe.title}</h3>
-                        <p>{recipe.description}</p>
-                        <Link to={`/recipes/${recipe.id}`}>
-                            <button>Recipe Details</button>
-                        </Link>
-                    </div>
-                ))
-            ) : (
-                <p>No recipes found.</p>
-            )}
-            <br />
-            <Link to="/">
-                <button>Homepage</button>
-            </Link>
+        <div>
+            <nav>
+                <ul>
+                    <li>
+                        <Link to="/">All Recipes</Link>
+                    </li>
+                    <li>
+                        <Link to="/recipes/gluten">Gluten-Free Recipes</Link>
+                    </li>
+                </ul>
+            </nav>
+            <div className="recipe-list">
+                <h2>All Recipes</h2>
+                {recipes.length > 0 ? (
+                    recipes.map((recipe) => (
+                        <div key={recipe.id}>
+                            <h3>{recipe.title}</h3>
+                            <p>{recipe.description}</p>
+                            <Link to={`/recipes/${recipe.id}`}>
+                                <button>Recipe Details</button>
+                            </Link>
+                        </div>
+                    ))
+                ) : (
+                    <p>No recipes found.</p>
+                )}
+                <br />
+                <Link to="/">
+                    <button>Homepage</button>
+                </Link>
+            </div>
         </div>
     );
 }

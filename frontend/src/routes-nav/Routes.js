@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Redirect, useNavigate } from "r
 import Homepage from "../homepage/Homepage";
 import RecipeList from "../recipes/RecipeList";
 import RecipeDetails from "../recipes/RecipeDetails";
+import GlutenFreeRecipeList from "../recipes/GlutenFreeRecipeList"
 
 /** Site-wide routes.
  *
@@ -26,7 +27,7 @@ function AppRoutes() {
 
                 <Route path="/recipes/:id" element={<RecipeDetails />} ></Route>
 
-                {/* <Route path="/shopping" element={<ShoppingList />}></Route> */}
+                <Route path="/recipes/gluten" element={<GlutenFreeRecipeList />} ></Route>
 
                 <Route path="*" element={() => {
                     navigate("/");
