@@ -6,6 +6,7 @@ function RecipeDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [recipe, setRecipe] = useState(null);
+    const [nutritionLabelWidget, setNutritionLabelWidget] = useState("");
     console.log(useParams());
 
     useEffect(() => {
@@ -13,6 +14,7 @@ function RecipeDetails() {
             .then((response) => response.json())
             .then((data) => {
                 setRecipe(data.recipe);
+                setNutritionLabelWidget(data.recipe.nutritionLabelWidget);
             })
             .catch((error) => {
                 console.error("Error fetching recipe details:", error);
@@ -45,6 +47,8 @@ function RecipeDetails() {
                     <li key={index}>{step}</li>
                 ))}
             </ol>
+            <div className="nutrition-label-container"
+                dangerouslySetInnerHTML={{ __html: nutritionLabelWidget }}></div>
             <button onClick={goBack}>All Recipes</button>
         </div>
     );

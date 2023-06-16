@@ -19,11 +19,11 @@ function Homepage() {
                         to="/recipes">
                         Recipes
                     </Link>
-                    <br></br>
+                    {/* <br></br>
                     <Link className="btn btn-primary font-weight-bold"
                         to="/shopping">
                         Shopping List
-                    </Link>
+                    </Link> */}
                 </p>
 
             </div>

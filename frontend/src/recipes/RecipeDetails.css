@@ -44,3 +44,9 @@
 .recipe-detail button:hover {
     background-color: #f78c00;
 }
+
+.nutrition-label-container {
+    text-align: left !important;
+    font-size: 12px !important;
+    margin-top: 20px !important;
+}
