@@ -79,12 +79,28 @@ router.get("/:id", async function (req, res, next) {
         const recipe = {
             id: response.data.id,
             title: response.data.title,
-            description: response.data.summary,
+            description: response.data.summary
+                .replace(/<\/?b>/g, "")
+                .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, ""),
             image: response.data.image,
             ingredients: response.data.extendedIngredients.map((ingredient) => ingredient.original),
-            instructions: response.data.instructions ? response.data.instructions.split("\n") : [],
+            instructions: response.data.instructions ? response.data.instructions
+                .replace(/<[^>]+>/g, "")
+                .split("\n") : [],
             // Add any other necessary fields you want to include in the response
         };
+
+        // Make a separate request to fetch the recipe's nutrition label as an HTML widget
+        const nutritionResponse = await api.get(`/recipes/${id}/nutritionLabel`, {
+            headers: {
+                Accept: "text/html", // Specify that you expect an HTML response
+            },
+        });
+
+        const nutritionLabelWidget = nutritionResponse.data;
+
+        // Include the nutrition label widget in the response
+        recipe.nutritionLabelWidget = nutritionLabelWidget;
 
         return res.json({ recipe });
     } catch (err) {
@@ -95,12 +111,12 @@ router.get("/:id", async function (req, res, next) {
 //get breakfast recipes 
 //returns a list of breakfast recipes 
 
-router.get("/breakfast", async function (req, res, next) {
+router.get("/gluten", async function (req, res, next) {
     try {
-        console.log("Fetching breakfast recipes...");
+        console.log("Fetching gluten free recipes...");
         const response = await api.get("/recipes/complexSearch", {
             params: {
-                type: "breakfast",
+                intolerances: "gluten",
                 number: 10,
             },
             headers: {
