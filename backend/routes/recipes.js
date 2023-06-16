@@ -64,6 +64,58 @@ router.get("/", async function (req, res, next) {
     }
 });
 
+router.get("/gluten", async function (req, res, next) {
+    try {
+        console.log("Fetching gluten free recipes...");
+        const response = await api.get("/recipes/complexSearch", {
+            params: {
+                intolerances: "gluten",
+                number: 10,
+            },
+            headers: {
+                Accept: "application/json",
+            },
+        });
+        console.log("Response received:", response.data);
+
+        const apiRecipes = response.data.results.map((recipe) => ({
+            id: recipe.id,
+            title: recipe.title,
+            description: recipe.summary
+                // .replace(/<\/?b>/g, "")
+                // .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, ""),
+                ? recipe.summary
+                    .replace(/<\/?b>/g, "")
+                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
+                : "No description available",
+            image: recipe.image,
+        }));
+
+        console.log("API recipes:", apiRecipes);
+
+        for (const recipe of apiRecipes) {
+            await db.query(
+                `INSERT INTO recipes (id, title, description, image)
+           VALUES ($1, $2, $3, $4)`,
+                [recipe.id, recipe.title, recipe.description, recipe.image]
+            );
+        }
+
+        const dbRecipes = await db.query("SELECT * FROM recipes");
+        console.log("DB recipes:", dbRecipes.rows);
+
+        res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+
+        return res.json({ apiRecipes, dbRecipes });
+    } catch (err) {
+        if (err.response && err.response.status === 404) {
+            throw new NotFoundError("Recipe not found");
+        }
+        return next(err);
+    }
+});
+
+
 /** GET /recipes/:id => { recipe }
  *
  * Returns the recipe with the given ID.
@@ -111,52 +163,6 @@ router.get("/:id", async function (req, res, next) {
 //get breakfast recipes 
 //returns a list of breakfast recipes 
 
-router.get("/gluten", async function (req, res, next) {
-    try {
-        console.log("Fetching gluten free recipes...");
-        const response = await api.get("/recipes/complexSearch", {
-            params: {
-                intolerances: "gluten",
-                number: 10,
-            },
-            headers: {
-                Accept: "application/json",
-            },
-        });
-        console.log("Response received:", response.data);
-
-        const apiRecipes = response.data.recipes.map((recipe) => ({
-            id: recipe.id,
-            title: recipe.title,
-            description: recipe.summary
-                .replace(/<\/?b>/g, "")
-                .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, ""),
-            image: recipe.image,
-        }));
-
-        console.log("API recipes:", apiRecipes);
-
-        for (const recipe of apiRecipes) {
-            await db.query(
-                `INSERT INTO recipes (id, title, description, image)
-           VALUES ($1, $2, $3, $4)`,
-                [recipe.id, recipe.title, recipe.description, recipe.image]
-            );
-        }
-
-        const dbRecipes = await db.query("SELECT * FROM recipes");
-        console.log("DB recipes:", dbRecipes.rows);
-
-        res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-
-        return res.json({ apiRecipes, dbRecipes });
-    } catch (err) {
-        if (err.response && err.response.status === 404) {
-            throw new NotFoundError("Recipe not found");
-        }
-        return next(err);
-    }
-});
 
 // Other route handlers for recipe routes...
 
