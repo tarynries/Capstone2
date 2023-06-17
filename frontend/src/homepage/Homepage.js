@@ -19,6 +19,11 @@ function Homepage() {
                         to="/recipes">
                         Recipes
                     </Link>
+                    <br></br>
+                    <Link className="btn btn-primary font-weight-bold mr-3"
+                        to="/shopping">
+                        Shopping List
+                    </Link>
                     {/* <br></br>
                     <Link className="btn btn-primary font-weight-bold"
                         to="/shopping">

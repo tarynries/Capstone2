@@ -7,6 +7,7 @@ import GlutenFreeRecipeList from "../recipes/GlutenFreeRecipeList";
 import DairyFreeRecipeList from "../recipes/DairyFreeRecipeList";
 import BreakfastRecipeList from "../recipes/BreakfastList";
 import MainCourseRecipeList from "../recipes/MaincourseList";
+import ShoppingList from "../shopping/ShoppingList";
 
 
 /** Site-wide routes.
@@ -38,6 +39,8 @@ function AppRoutes() {
                 <Route path="/recipes/maincourse" element={<MainCourseRecipeList />} ></Route>
 
                 <Route path="/recipes/breakfast" element={<BreakfastRecipeList />} ></Route>
+
+                <Route path="/shopping" element={<ShoppingList />} ></Route>
 
                 <Route path="*" element={() => {
                     navigate("/");
