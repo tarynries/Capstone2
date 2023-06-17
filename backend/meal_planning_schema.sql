@@ -20,6 +20,11 @@ CREATE TABLE recipes (
   meal_category_id INTEGER REFERENCES meal_categories(meal_category_id)
 );
 
+CREATE TABLE items (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
+
 
 CREATE TABLE ingredients (
   ingredient_id SERIAL PRIMARY KEY,
