@@ -58,3 +58,8 @@ CREATE TABLE  user_favorites (
   recipe_id INTEGER REFERENCES recipes(recipe_id),
   PRIMARY KEY (user_id, recipe_id)
 );
+
+CREATE TABLE jokes (
+  id SERIAL PRIMARY KEY,
+  text VARCHAR(255)
+);
