@@ -8,6 +8,7 @@ import DairyFreeRecipeList from "../recipes/DairyFreeRecipeList";
 import BreakfastRecipeList from "../recipes/BreakfastList";
 import MainCourseRecipeList from "../recipes/MaincourseList";
 import ShoppingList from "../shopping/ShoppingList";
+import JokeList from "../jokes/JokeList";
 
 
 /** Site-wide routes.
@@ -41,6 +42,8 @@ function AppRoutes() {
                 <Route path="/recipes/breakfast" element={<BreakfastRecipeList />} ></Route>
 
                 <Route path="/shopping" element={<ShoppingList />} ></Route>
+
+                <Route path="/jokes" element={<JokeList />} ></Route>
 
                 <Route path="*" element={() => {
                     navigate("/");

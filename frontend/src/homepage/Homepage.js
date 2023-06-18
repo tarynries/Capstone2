@@ -24,6 +24,11 @@ function Homepage() {
                         to="/shopping">
                         Shopping List
                     </Link>
+                    <br></br>
+                    <Link className="btn btn-primary font-weight-bold mr-3"
+                        to="/jokes">
+                        Jokes
+                    </Link>
                     {/* <br></br>
                     <Link className="btn btn-primary font-weight-bold"
                         to="/shopping">
