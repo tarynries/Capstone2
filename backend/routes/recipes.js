@@ -17,6 +17,16 @@ const router = express.Router();
 router.get("/", async function (req, res, next) {
     // console.log("GET /recipes request received");
     try {
+
+        // Fetch recipes from the database
+        const dbRecipes = await db.query("SELECT * FROM recipes");
+
+        // If there are recipes in the database, return them
+        if (dbRecipes.rows.length > 0) {
+            return res.json({ recipes: dbRecipes.rows });
+        }
+
+
         const response = await api.get("/recipes/random", {
             params: {
                 number: 10, // Specify the number of recipes you want to fetch
@@ -48,13 +58,15 @@ router.get("/", async function (req, res, next) {
             );
         }
 
+        // Fetch recipes from the database again
+        const updatedDbRecipes = await db.query("SELECT * FROM recipes");
         // Fetch recipes from the database
-        const dbRecipes = await db.query("SELECT * FROM recipes");
+        // const dbRecipes = await db.query("SELECT * FROM recipes");
 
         // Set the Cache-Control header to disable caching
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
-        return res.json({ apiRecipes, dbRecipes });
+        return res.json({ updatedDbRecipes });
 
     } catch (err) {
         if (err.response && err.response.status === 404) {
@@ -63,6 +75,29 @@ router.get("/", async function (req, res, next) {
         return next(err);
     }
 });
+
+//  Search Recipes
+router.get("/search", async function (req, res, next) {
+    const { query } = req.query;
+
+    try {
+        const searchQuery = `%${query}%`;
+
+        const dbRecipes = await db.query(
+            `SELECT * FROM recipes WHERE title ILIKE $1`,
+            [searchQuery]
+        );
+
+        if (dbRecipes.rows.length > 0) {
+            return res.json({ recipes: dbRecipes.rows });
+        } else {
+            return res.json({ recipes: [] });
+        }
+    } catch (err) {
+        return next(err);
+    }
+});
+
 
 /** GET /recipes/gluten => { recipes: [{ recipe1 }, { recipe2 }, ...] }
  *
