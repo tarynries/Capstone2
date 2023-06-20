@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const recipeRoutes = require("./routes/recipes");
 const shoppingRoutes = require("./routes/shopping");
-const jokeRoutes = require("./routes/jokes")
+const jokeRoutes = require("./routes/jokes");
 
 const app = express();
 
@@ -16,6 +16,7 @@ app.use(cors({ credentials: true }));
 app.use("/recipes", recipeRoutes);
 app.use("/api/shopping-list", shoppingRoutes);
 app.use("/jokes", jokeRoutes);
+
 
 
 // console.log("Routes registered:", app._router.stack);

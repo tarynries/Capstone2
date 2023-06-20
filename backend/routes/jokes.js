@@ -41,10 +41,10 @@ router.get("/", async function (req, res, next) {
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
-        return res.json({ jokes });
+        return res.json({ joke: jokes ? jokes.text : null });
     } catch (err) {
         if (err.response && err.response.status === 404) {
-            throw new NotFoundError("Trivia not found");
+            throw new NotFoundError("Joke not found");
         }
         return next(err);
     }
