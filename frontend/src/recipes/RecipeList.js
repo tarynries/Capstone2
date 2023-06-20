@@ -5,22 +5,55 @@ import axios from "axios";
 
 function RecipeList() {
     const [recipes, setRecipes] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:3001/recipes")
+        fetchRecipes();
+    }, []);
+
+    const fetchRecipes = () => {
+        let url = "http://localhost:3001/recipes";
+        if (searchQuery) {
+            url = `${url}/search?query=${searchQuery}`;
+        }
+
+        fetch(url)
             .then((response) => {
                 return response.json();
             })
             .then((data) => {
-                if (data.apiRecipes) {
-                    setRecipes(data.apiRecipes);
+                if (data.recipes) {
+                    setRecipes(data.recipes);
                 } else {
+                    setRecipes([]);
                 }
             })
             .catch((error) => {
                 console.error("Error fetching recipes:", error);
             });
-    }, []);
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        fetchRecipes();
+    };
+
+    // useEffect(() => {
+    //     fetch("http://localhost:3001/recipes")
+    //         .then((response) => {
+    //             return response.json();
+    //         })
+    //         .then((data) => {
+    //             if (data.recipes) {
+    //                 setRecipes(data.recipes);
+    //             } else {
+    //                 setRecipes([]);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching recipes:", error);
+    //         });
+    // }, []);
 
     console.log(recipes);
     return (
@@ -41,11 +74,23 @@ function RecipeList() {
                     </li>
                 </ul>
             </nav>
+            <Link to="/">
+                <button>Homepage</button>
+            </Link>
             <div className="recipe-list">
                 <h2>All Recipes</h2>
+                <form onSubmit={handleSearch}>
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search recipes..."
+                    />
+                    <button type="submit">Search</button>
+                </form>
                 {recipes.length > 0 ? (
-                    recipes.map((recipe) => (
-                        <div key={recipe.id}>
+                    recipes.map((recipe, index) => (
+                        <div key={`${recipe.id}-${index}`}>
                             <h3>{recipe.title}</h3>
                             <p>{recipe.description}</p>
                             <Link to={`/recipes/${recipe.id}`}>
