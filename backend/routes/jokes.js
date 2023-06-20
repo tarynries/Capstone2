@@ -16,24 +16,24 @@ router.get("/", async function (req, res, next) {
             },
         });
 
-        console.log("response", response);
+        console.log("response", response.data);
 
         const MAX_JOKE_LENGTH = 255;
 
         const apiJokes = [];
-        if (response.data.text) {
-            const joke = {
-                id: null,
-                text: response.data.text.substring(0, MAX_JOKE_LENGTH),
-            };
-            apiJokes.push(joke);
-        }
 
-        for (const joke of apiJokes) {
-            const result = await db.query(`INSERT INTO jokes (text) VALUES ($1)`, [joke.text]);
-
-            const insertedJoke = result.rows[0];
-            joke.id = insertedJoke ? insertedJoke.id : null;
+        if (response.data.jokes && response.data.jokes.length > 0) {
+            for (const joke of response.data.jokes) {
+                const truncatedJoke = joke.text.substring(0, MAX_JOKE_LENGTH);
+                const insertedJoke = await db.query(
+                    `INSERT INTO jokes (text) VALUES ($1) RETURNING id, text`,
+                    [truncatedJoke]
+                );
+                apiJokes.push({
+                    id: insertedJoke.rows[0].id,
+                    text: insertedJoke.rows[0].text,
+                });
+            }
         }
 
         const dbJokes = await db.query("SELECT * FROM jokes");
@@ -41,7 +41,7 @@ router.get("/", async function (req, res, next) {
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
-        return res.json({ joke: jokes ? jokes.text : null });
+        return res.json({ jokes });
     } catch (err) {
         if (err.response && err.response.status === 404) {
             throw new NotFoundError("Joke not found");
