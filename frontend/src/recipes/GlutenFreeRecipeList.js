@@ -24,19 +24,22 @@ function GlutenFreeRecipeList() {
     return (
         <div className="recipe-list">
             <h2>Gluten-Free Recipes</h2>
-            {glutenFreeRecipes.length > 0 ? (
-                glutenFreeRecipes.map((recipe) => (
-                    <div key={recipe.id}>
-                        <h3>{recipe.title}</h3>
-                        <p>{recipe.description}</p>
-                        <Link to={`/recipes/${recipe.id}`}>
-                            <button>Recipe Details</button>
-                        </Link>
-                    </div>
-                ))
-            ) : (
-                <p>No gluten-free recipes found.</p>
-            )}
+            <div className="recipes-container">
+                {glutenFreeRecipes.length > 0 ? (
+                    glutenFreeRecipes.map((recipe) => (
+                        <div key={recipe.id}>
+                            <h3>{recipe.title}</h3>
+                            <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+                            {/* <p>{recipe.description}</p> */}
+                            <Link to={`/recipes/${recipe.id}`}>
+                                <button>Recipe Details</button>
+                            </Link>
+                        </div>
+                    ))
+                ) : (
+                    <p>No gluten-free recipes found.</p>
+                )}
+            </div>
             <br />
             <Link to="/">
                 <button>Homepage</button>

@@ -1,52 +1,66 @@
 .recipe-detail {
     text-align: left;
+    background-color: #f9f9f9;
     padding: 2rem;
     border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.recipe-detail h2 {
+.recipe-title {
+    text-align: center;
     margin-bottom: 1rem;
 }
 
-.recipe-detail img {
-    max-width: 100%;
+.recipe-image {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    height: auto;
+}
+
+.recipe-description,
+.recipe-ingredients,
+.recipe-instructions,
+.nutrition-label-container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+}
+
+.recipe-description {
     margin-bottom: 1rem;
 }
 
-.recipe-detail p {
-    margin-bottom: 0.5rem;
-}
-
-.recipe-detail h4 {
-    margin-bottom: 0.5rem;
-}
-
-.recipe-detail ul,
-.recipe-detail ol {
-    text-align: left;
+.recipe-ingredients,
+.recipe-instructions {
     margin-bottom: 1rem;
-    padding-left: 1rem;
 }
 
-.recipe-detail li {
-    margin-bottom: 0.25rem;
-}
-
-.recipe-detail button {
+.recipe-button {
     padding: 0.5rem 1rem;
-    background-color: #fca311;
+    background-color: #ff8888;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.recipe-detail button:hover {
-    background-color: #f78c00;
+.recipe-button:hover {
+    background-color: #ff8888;
 }
 
-.nutrition-label-container {
-    text-align: left !important;
-    font-size: 12px !important;
-    margin-top: 20px !important;
+.recipe-detail .nutrition-label-container {
+    text-align: left;
+    /* Align to the left side */
+    margin-top: 2rem;
+    /* Adjust the margin as desired */
+    font-size: 14px;
+    /* Decrease the font size */
+}
+
+.recipe-detail .nutrition-label-container .label-widget {
+    width: 250px;
+    /* Adjust the width as desired */
+    height: auto;
+    /* Maintain aspect ratio */
 }

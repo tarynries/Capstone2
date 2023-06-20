@@ -25,24 +25,25 @@ function JokeList() {
     }, []);
 
     return (
-        <div className="joke-list">
-            <h2>Jokes</h2>
-            {jokeList.length > 0 ? (
-                jokeList.map((joke, index) => (
-
-                    // <h3 key={index}>{joke}</h3>
-                    <div key={index} className="joke-container">
-                        <h3>{joke}</h3>
-                    </div>
-                ))
-            ) : (
-                <p>No jokes found.</p>
-            )}
-            <br />
-            <Link to="/">
-                <button>Homepage</button>
-            </Link>
+        <div>
+            <h2 className="joke-list-title">Jokes</h2>
+            <div className="joke-list">
+                {jokeList.length > 0 ? (
+                    jokeList.map((joke, index) => (
+                        <div key={index} className="joke-container">
+                            <h3 className="joke">{joke}</h3>
+                        </div>
+                    ))
+                ) : (
+                    <p>No jokes found.</p>
+                )}
+                <br />
+                <Link to="/">
+                    <button className="joke-button">Homepage</button>
+                </Link>
+            </div>
         </div>
+
     );
 }
 

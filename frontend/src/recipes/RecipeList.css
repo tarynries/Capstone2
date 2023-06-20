@@ -4,6 +4,7 @@
     padding: 2rem;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .recipe-list h2 {
@@ -26,9 +27,18 @@
     margin-bottom: 0.5rem;
 }
 
+.recipe-list .recipes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+}
+
 .recipe-list button {
-    padding: 0.5rem 1rem;
-    background-color: #fca311;
+    padding: 0.25rem 0.5rem;
+    /* Adjust the padding values as desired */
+    margin-right: 0.5rem;
+    /* Add margin to create spacing between buttons */
+    background-color: #ff8888;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -36,5 +46,71 @@
 }
 
 .recipe-list button:hover {
-    background-color: #f78c00;
+    background-color: #ff8888;
+}
+
+.recipe-image {
+    width: 200px;
+    /* Adjust the width as desired */
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
+.title-search-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    /* Adjust the gap as desired */
+}
+
+.navbar {
+    background-color: #ff8888;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar li {
+    margin-right: 1rem;
+}
+
+.navbar li:last-child {
+    margin-right: 0;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+}
+
+.navbar a::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.navbar a:hover::after {
+    opacity: 1;
+}
+
+.navbar a.homepage-button {
+    background-color: #ff8888;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    color: #fff;
 }

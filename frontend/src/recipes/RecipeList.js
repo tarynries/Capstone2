@@ -38,6 +38,7 @@ function RecipeList() {
         fetchRecipes();
     };
 
+
     // useEffect(() => {
     //     fetch("http://localhost:3001/recipes")
     //         .then((response) => {
@@ -58,7 +59,7 @@ function RecipeList() {
     console.log(recipes);
     return (
         <div>
-            <nav>
+            <nav className="navbar">
                 <ul>
                     <li>
                         <Link to="/recipes/gluten">Gluten-Free Recipes</Link>
@@ -72,41 +73,49 @@ function RecipeList() {
                     <li>
                         <Link to="/recipes/maincourse">Main Course Recipes</Link>
                     </li>
+                    <li>
+                        <Link to="/">
+                            <button>Homepage</button>
+                        </Link>
+                    </li>
                 </ul>
             </nav>
-            <Link to="/">
-                <button>Homepage</button>
-            </Link>
             <div className="recipe-list">
-                <h2>All Recipes</h2>
-                <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search recipes..."
-                    />
-                    <button type="submit">Search</button>
-                </form>
-                {recipes.length > 0 ? (
-                    recipes.map((recipe, index) => (
-                        <div key={`${recipe.id}-${index}`}>
-                            <h3>{recipe.title}</h3>
-                            <p>{recipe.description}</p>
-                            <Link to={`/recipes/${recipe.id}`}>
-                                <button>Recipe Details</button>
-                            </Link>
-                        </div>
-                    ))
-                ) : (
-                    <p>No recipes found.</p>
-                )}
+                <div className="title-search-container">
+                    <h2>All Recipes</h2>
+                    <form onSubmit={handleSearch}>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search recipes..."
+                        />
+                        <button type="submit">Search</button>
+                    </form>
+                </div >
+                <div className="recipes-container">
+                    {recipes.length > 0 ? (
+                        recipes.map((recipe, index) => (
+                            <div key={`${recipe.id}-${index}`}>
+                                <h3>{recipe.title}</h3>
+                                <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+                                {/* <p>{recipe.description}</p> */}
+                                <Link to={`/recipes/${recipe.id}`}>
+                                    <button>Recipe Details</button>
+                                </Link>
+                            </div>
+
+                        ))
+                    ) : (
+                        <p>No recipes found.</p>
+                    )}
+                </div>
                 <br />
                 <Link to="/">
                     <button>Homepage</button>
                 </Link>
             </div>
-        </div>
+        </div >
     );
 }
 

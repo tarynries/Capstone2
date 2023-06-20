@@ -24,19 +24,22 @@ function DairyFreeRecipeList() {
     return (
         <div className="recipe-list">
             <h2>Dairy-Free Recipes</h2>
-            {dairyFreeRecipes.length > 0 ? (
-                dairyFreeRecipes.map((recipe) => (
-                    <div key={recipe.id}>
-                        <h3>{recipe.title}</h3>
-                        <p>{recipe.description}</p>
-                        <Link to={`/recipes/${recipe.id}`}>
-                            <button>Recipe Details</button>
-                        </Link>
-                    </div>
-                ))
-            ) : (
-                <p>No dairy-free recipes found.</p>
-            )}
+            <div className="recipes-container">
+                {dairyFreeRecipes.length > 0 ? (
+                    dairyFreeRecipes.map((recipe) => (
+                        <div key={recipe.id}>
+                            <h3>{recipe.title}</h3>
+                            <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+                            {/* <p>{recipe.description}</p> */}
+                            <Link to={`/recipes/${recipe.id}`}>
+                                <button>Recipe Details</button>
+                            </Link>
+                        </div>
+                    ))
+                ) : (
+                    <p>No dairy-free recipes found.</p>
+                )}
+            </div>
             <br />
             <Link to="/">
                 <button>Homepage</button>

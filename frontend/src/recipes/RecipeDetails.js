@@ -32,24 +32,25 @@ function RecipeDetails() {
 
     return (
         <div className="recipe-detail">
-            <h2>{recipe.title}</h2>
-            <img src={recipe.image} alt={recipe.title} />
-            <p>{recipe.description}</p>
+            <h2 className="recipe-title">{recipe.title}</h2>
+            <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+            <h4>Description:</h4>
+            <p className="recipe-description">{recipe.description}</p>
             <h4>Ingredients:</h4>
-            <ul>
+            <ul className="recipe-ingredients">
                 {recipe.ingredients.map((ingredient, index) => (
                     <li key={index}>{ingredient}</li>
                 ))}
             </ul>
             <h4>Instructions:</h4>
-            <ol>
+            <ol className="recipe-instructions">
                 {recipe.instructions.map((step, index) => (
                     <li key={index}>{step}</li>
                 ))}
             </ol>
             <div className="nutrition-label-container"
                 dangerouslySetInnerHTML={{ __html: nutritionLabelWidget }}></div>
-            <button onClick={goBack}>All Recipes</button>
+            <button className="recipe-button" onClick={goBack}>All Recipes</button>
         </div>
     );
 }
