@@ -5,6 +5,7 @@ import "./JokeList.css"
 
 function JokeList() {
     const [jokeList, setJokeList] = useState([]);
+    const [currentJokeIndex, setCurrentJokeIndex] = useState(0);
 
     useEffect(() => {
         fetch("http://localhost:3001/jokes")
@@ -15,6 +16,8 @@ function JokeList() {
                 console.log("Jokes data:", data);
                 if (data.jokes) {
                     setJokeList(data.jokes);
+                    const randomIndex = Math.floor(Math.random() * data.jokes.length);
+                    setCurrentJokeIndex(randomIndex);
                     console.log("Updated joke list:", jokeList);
                 } else {
                 }
@@ -24,19 +27,25 @@ function JokeList() {
             });
     }, []);
 
+    const handleNextJoke = () => {
+        setCurrentJokeIndex((prevIndex) => prevIndex + 1);
+    };
+
     return (
         <div>
             <h2 className="joke-list-title">Jokes</h2>
+            <div className="joke-list-background"></div>
             <div className="joke-list">
                 {jokeList.length > 0 ? (
-                    jokeList.map((joke, index) => (
-                        <div key={index} className="joke-container">
-                            <h3 className="joke">{joke}</h3>
-                        </div>
-                    ))
+                    <div key={currentJokeIndex} className="joke-container">
+                        <h3 className="joke">{jokeList[currentJokeIndex]}</h3>
+                    </div>
                 ) : (
                     <p>No jokes found.</p>
                 )}
+                <button className="joke-button" onClick={handleNextJoke}>
+                    Next Joke
+                </button>
                 <br />
                 <Link to="/">
                     <button className="joke-button">Homepage</button>
