@@ -47,6 +47,7 @@ function ShoppingList() {
 
     return (
         <div className="shopping-list-container">
+            <div className="shopping-list-background"></div>
             <div className="shopping-list">
                 <h2><FontAwesomeIcon icon={faShoppingBasket} /> Shopping List</h2>
                 <input
