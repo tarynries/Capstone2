@@ -21,6 +21,7 @@ router.get("/", async function (req, res, next) {
         // Fetch recipes from the database
         const dbRecipes = await db.query("SELECT * FROM recipes");
 
+        console.log(dbRecipes);
         // If there are recipes in the database, return them
         if (dbRecipes.rows.length > 0) {
             return res.json({ recipes: dbRecipes.rows });
