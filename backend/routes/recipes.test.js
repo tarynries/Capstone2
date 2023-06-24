@@ -15,7 +15,7 @@ describe("Recipe Routes", () => {
 
             const res = await request(app).get("/recipes");
             expect(res.status).toBe(200);
-            expect(res.body.recipes).toBeDefined(); // Update the property name to 'recipes'
+            expect(res.body.recipes).toBeDefined();
             expect(Array.isArray(res.body.recipes)).toBe(true);
             expect(res.body.recipes.length).toBeGreaterThan(0);
 

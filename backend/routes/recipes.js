@@ -21,7 +21,6 @@ router.get("/", async function (req, res, next) {
         // Fetch recipes from the database
         const dbRecipes = await db.query("SELECT * FROM recipes");
 
-        console.log(dbRecipes);
         // If there are recipes in the database, return them
         if (dbRecipes.rows.length > 0) {
             return res.json({ recipes: dbRecipes.rows });
@@ -36,7 +35,6 @@ router.get("/", async function (req, res, next) {
                 Accept: "application/json", // Specify that you expect a JSON response
             },
         });
-        console.log("response", response);
 
 
         // Extract the necessary data from the Spoonacular API response
@@ -99,7 +97,6 @@ router.get("/search", async function (req, res, next) {
     }
 });
 
-
 /** GET /recipes/gluten => { recipes: [{ recipe1 }, { recipe2 }, ...] }
  *
  * Returns a list of gluten free recipes.
@@ -111,7 +108,7 @@ router.get("/gluten", async function (req, res, next) {
         const response = await api.get("/recipes/complexSearch", {
             params: {
                 intolerances: "gluten",
-                number: 10,
+                number: 20,
             },
             headers: {
                 Accept: "application/json",
@@ -156,6 +153,9 @@ router.get("/gluten", async function (req, res, next) {
     }
 });
 
+
+
+
 /** GET /recipes/dairy => { recipes: [{ recipe1 }, { recipe2 }, ...] }
  *
  * Returns a list of dairy free recipes.
@@ -163,7 +163,6 @@ router.get("/gluten", async function (req, res, next) {
 
 router.get("/dairy", async function (req, res, next) {
     try {
-        console.log("Fetching dairy free recipes...");
         const response = await api.get("/recipes/complexSearch", {
             params: {
                 intolerances: "dairy",
@@ -173,7 +172,6 @@ router.get("/dairy", async function (req, res, next) {
                 Accept: "application/json",
             },
         });
-        console.log("Response received:", response.data);
 
         const apiRecipes = response.data.results.map((recipe) => ({
             id: recipe.id,
@@ -186,7 +184,6 @@ router.get("/dairy", async function (req, res, next) {
             image: recipe.image,
         }));
 
-        console.log("API recipes:", apiRecipes);
 
         for (const recipe of apiRecipes) {
             await db.query(
@@ -197,7 +194,6 @@ router.get("/dairy", async function (req, res, next) {
         }
 
         const dbRecipes = await db.query("SELECT * FROM recipes");
-        console.log("DB recipes:", dbRecipes.rows);
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
@@ -217,17 +213,15 @@ router.get("/dairy", async function (req, res, next) {
 
 router.get("/breakfast", async function (req, res, next) {
     try {
-        console.log("Fetching breakfast recipes...");
         const response = await api.get("/recipes/complexSearch", {
             params: {
                 type: "breakfast",
-                number: 10,
+                number: 20,
             },
             headers: {
                 Accept: "application/json",
             },
         });
-        console.log("Response received:", response.data);
 
         const apiRecipes = response.data.results.map((recipe) => ({
             id: recipe.id,
@@ -240,8 +234,6 @@ router.get("/breakfast", async function (req, res, next) {
             image: recipe.image,
         }));
 
-        console.log("API recipes:", apiRecipes);
-
         for (const recipe of apiRecipes) {
             await db.query(
                 `INSERT INTO recipes (id, title, description, image)
@@ -251,7 +243,6 @@ router.get("/breakfast", async function (req, res, next) {
         }
 
         const dbRecipes = await db.query("SELECT * FROM recipes");
-        console.log("DB recipes:", dbRecipes.rows);
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
@@ -272,17 +263,15 @@ router.get("/breakfast", async function (req, res, next) {
 
 router.get("/maincourse", async function (req, res, next) {
     try {
-        console.log("Fetching main course recipes...");
         const response = await api.get("/recipes/complexSearch", {
             params: {
                 type: "main course",
-                number: 10,
+                number: 20,
             },
             headers: {
                 Accept: "application/json",
             },
         });
-        console.log("Response received:", response.data);
 
         const apiRecipes = response.data.results.map((recipe) => ({
             id: recipe.id,
@@ -295,7 +284,6 @@ router.get("/maincourse", async function (req, res, next) {
             image: recipe.image,
         }));
 
-        console.log("API recipes:", apiRecipes);
 
         for (const recipe of apiRecipes) {
             await db.query(
@@ -306,7 +294,6 @@ router.get("/maincourse", async function (req, res, next) {
         }
 
         const dbRecipes = await db.query("SELECT * FROM recipes");
-        console.log("DB recipes:", dbRecipes.rows);
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
@@ -359,6 +346,9 @@ router.get("/:id", async function (req, res, next) {
 
         return res.json({ recipe });
     } catch (err) {
+        if (err.response && err.response.status === 404) {
+            return res.status(404).json({ error: "Recipe not found" });
+        }
         return next(err);
     }
 });
