@@ -3,7 +3,6 @@ const api = require("../api");
 const db = require("../db");
 const Recipe = require("../models/recipes");
 const { NotFoundError } = require("../expressError");
-// const axios = require("axios");
 
 
 const router = express.Router();
@@ -59,8 +58,6 @@ router.get("/", async function (req, res, next) {
 
         // Fetch recipes from the database again
         const updatedDbRecipes = await db.query("SELECT * FROM recipes");
-        // Fetch recipes from the database
-        // const dbRecipes = await db.query("SELECT * FROM recipes");
 
         // Set the Cache-Control header to disable caching
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
@@ -120,8 +117,6 @@ router.get("/gluten", async function (req, res, next) {
             id: recipe.id,
             title: recipe.title,
             description: recipe.summary
-                // .replace(/<\/?b>/g, "")
-                // .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, ""),
                 ? recipe.summary
                     .replace(/<\/?b>/g, "")
                     .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
@@ -314,10 +309,8 @@ router.get("/:id", async function (req, res, next) {
     try {
         const id = req.params.id;
 
-        // Make a request to the Spoonacular API to fetch recipe details
         const response = await api.get(`/recipes/${id}/information`);
 
-        // Extract the necessary data from the Spoonacular API response
         const recipe = {
             id: response.data.id,
             title: response.data.title,
@@ -329,13 +322,12 @@ router.get("/:id", async function (req, res, next) {
             instructions: response.data.instructions ? response.data.instructions
                 .replace(/<[^>]+>/g, "")
                 .split("\n") : [],
-            // Add any other necessary fields you want to include in the response
         };
 
         // Make a separate request to fetch the recipe's nutrition label as an HTML widget
         const nutritionResponse = await api.get(`/recipes/${id}/nutritionLabel`, {
             headers: {
-                Accept: "text/html", // Specify that you expect an HTML response
+                Accept: "text/html",
             },
         });
 
@@ -354,7 +346,5 @@ router.get("/:id", async function (req, res, next) {
 });
 
 
-
-// Other route handlers for recipe routes...
 
 module.exports = router;
