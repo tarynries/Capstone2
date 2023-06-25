@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./RecipeList.css"
-import axios from "axios";
+
 
 function RecipeList() {
     const [recipes, setRecipes] = useState([]);
@@ -23,7 +23,7 @@ function RecipeList() {
             })
             .then((data) => {
                 if (data.recipes) {
-                    setRecipes(data.recipes);
+                    setRecipes(data.recipes.slice(0, 200));
                 } else {
                     setRecipes([]);
                 }

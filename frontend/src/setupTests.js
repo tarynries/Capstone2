@@ -3,3 +3,11 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+
+require('@babel/register')({
+    presets: ['@babel/preset-env', '@babel/preset-react'],
+});
+
+
+
+

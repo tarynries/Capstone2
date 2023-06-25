@@ -1,6 +1,6 @@
+import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import "./ShoppingList.css"
 import { faShoppingBasket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
