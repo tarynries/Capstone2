@@ -8,7 +8,7 @@
 
 
 ## Features
-```1. Search bar for recipes. I chose to implement this feature so users could  easily find recipes based on their preferences. 
+1. Search bar for recipes. I chose to implement this feature so users could  easily find recipes based on their preferences. 
 
 2. Navbar for categories of recipes. I chose to implement this feature for additional preference selection as well as for users with intollerances. Having the option at the top of the page allows for easier usability.
 
@@ -18,7 +18,7 @@
 
 5. Shopping list add and remove items. I chose to implement this feature so users could have the ability to create a shopping list in the same place they are browsing for recipes. Saving the list in local storage allows users to go shopping and remove items from the list as they pick them up or as they purchase them. 
 
-6. Jokes feature. I decided to add this feature as a fun addition to an often mundane activity for those who do not enjoying shopping and cooking.```
+6. Jokes feature. I decided to add this feature as a fun addition to an often mundane activity for those who do not enjoying shopping and cooking.
 
 
 ## Tests
