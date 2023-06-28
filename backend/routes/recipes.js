@@ -1,22 +1,53 @@
 const express = require("express");
 const api = require("../api");
 const db = require("../db");
-const Recipe = require("../models/recipes");
 const { NotFoundError } = require("../expressError");
 
 
 const router = express.Router();
 
 
+async function fetchAndStoreRecipes(apiParams) {
+    const response = await api.get("/recipes/complexSearch", {
+        params: apiParams,
+        headers: {
+            Accept: "application/json",
+        },
+    });
+    // Fetch recipes from the api
+    const apiRecipes = response.data.results.map((recipe) => ({
+        id: recipe.id,
+        title: recipe.title,
+        description: recipe.summary
+            ? recipe.summary
+                .replace(/<\/?b>/g, "")
+                .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
+            : "No description available",
+        image: recipe.image,
+    }));
+
+    // Insert recipes to the database
+    for (const recipe of apiRecipes) {
+        await db.query(
+            `INSERT INTO recipes (id, title, description, image)
+       VALUES ($1, $2, $3, $4)`,
+            [recipe.id, recipe.title, recipe.description, recipe.image]
+        );
+    }
+
+    const dbRecipes = await db.query("SELECT * FROM recipes");
+
+    return { apiRecipes, dbRecipes };
+}
 
 /** GET /recipes => { recipes: [{ recipe1 }, { recipe2 }, ...] }
  *
  * Returns a list of all recipes.
+ * 
  **/
-router.get("/", async function (req, res, next) {
-    // console.log("GET /recipes request received");
-    try {
 
+router.get("/", async function (req, res, next) {
+    try {
         // Fetch recipes from the database
         const dbRecipes = await db.query("SELECT * FROM recipes");
 
@@ -25,45 +56,17 @@ router.get("/", async function (req, res, next) {
             return res.json({ recipes: dbRecipes.rows });
         }
 
+        // If no recipes found in the database, fetch from the Spoonacular API
+        const apiParams = {
+            number: 10,
+        };
 
-        const response = await api.get("/recipes/random", {
-            params: {
-                number: 10, // Specify the number of recipes you want to fetch
-            },
-            headers: {
-                Accept: "application/json", // Specify that you expect a JSON response
-            },
-        });
-
-
-        // Extract the necessary data from the Spoonacular API response
-        const apiRecipes = response.data.recipes.map((recipe) => ({
-            id: recipe.id,
-            title: recipe.title,
-            description: recipe.summary
-                .replace(/<\/?b>/g, "")
-                .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, ""),
-            image: recipe.image,
-        }));
-
-
-        // Store the recipes in the database
-        for (const recipe of apiRecipes) {
-            await db.query(
-                `INSERT INTO recipes (id, title, description, image)
-               VALUES ($1, $2, $3, $4)`,
-                [recipe.id, recipe.title, recipe.description, recipe.image]
-            );
-        }
-
-        // Fetch recipes from the database again
-        const updatedDbRecipes = await db.query("SELECT * FROM recipes");
+        const updatedDbRecipes = await fetchAndStoreRecipes(apiParams);
 
         // Set the Cache-Control header to disable caching
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
-        return res.json({ updatedDbRecipes });
-
+        return res.json({ recipes: updatedDbRecipes });
     } catch (err) {
         if (err.response && err.response.status === 404) {
             throw new NotFoundError("Recipe not found");
@@ -72,7 +75,11 @@ router.get("/", async function (req, res, next) {
     }
 });
 
-//  Search Recipes
+
+/** GET /recipes/search => { recipes: [{ recipe1 }, { recipe2 }, ...] }
+ *
+ * Returns a list of recipes that include a specified search.
+ **/
 router.get("/search", async function (req, res, next) {
     const { query } = req.query;
 
@@ -98,44 +105,15 @@ router.get("/search", async function (req, res, next) {
  *
  * Returns a list of gluten free recipes.
  **/
-
 router.get("/gluten", async function (req, res, next) {
     try {
-        console.log("Fetching gluten free recipes...");
-        const response = await api.get("/recipes/complexSearch", {
-            params: {
-                intolerances: "gluten",
-                number: 20,
-            },
-            headers: {
-                Accept: "application/json",
-            },
-        });
-        console.log("Response received:", response.data);
 
-        const apiRecipes = response.data.results.map((recipe) => ({
-            id: recipe.id,
-            title: recipe.title,
-            description: recipe.summary
-                ? recipe.summary
-                    .replace(/<\/?b>/g, "")
-                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
-                : "No description available",
-            image: recipe.image,
-        }));
+        const apiParams = {
+            intolerances: "gluten",
+            number: 20,
+        };
 
-        console.log("API recipes:", apiRecipes);
-
-        for (const recipe of apiRecipes) {
-            await db.query(
-                `INSERT INTO recipes (id, title, description, image)
-           VALUES ($1, $2, $3, $4)`,
-                [recipe.id, recipe.title, recipe.description, recipe.image]
-            );
-        }
-
-        const dbRecipes = await db.query("SELECT * FROM recipes");
-        console.log("DB recipes:", dbRecipes.rows);
+        const { apiRecipes, dbRecipes } = await fetchAndStoreRecipes(apiParams);
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
@@ -150,7 +128,6 @@ router.get("/gluten", async function (req, res, next) {
 
 
 
-
 /** GET /recipes/dairy => { recipes: [{ recipe1 }, { recipe2 }, ...] }
  *
  * Returns a list of dairy free recipes.
@@ -158,37 +135,12 @@ router.get("/gluten", async function (req, res, next) {
 
 router.get("/dairy", async function (req, res, next) {
     try {
-        const response = await api.get("/recipes/complexSearch", {
-            params: {
-                intolerances: "dairy",
-                number: 20,
-            },
-            headers: {
-                Accept: "application/json",
-            },
-        });
+        const apiParams = {
+            intolerances: "dairy",
+            number: 20,
+        };
 
-        const apiRecipes = response.data.results.map((recipe) => ({
-            id: recipe.id,
-            title: recipe.title,
-            description: recipe.summary
-                ? recipe.summary
-                    .replace(/<\/?b>/g, "")
-                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
-                : "No description available",
-            image: recipe.image,
-        }));
-
-
-        for (const recipe of apiRecipes) {
-            await db.query(
-                `INSERT INTO recipes (id, title, description, image)
-           VALUES ($1, $2, $3, $4)`,
-                [recipe.id, recipe.title, recipe.description, recipe.image]
-            );
-        }
-
-        const dbRecipes = await db.query("SELECT * FROM recipes");
+        const { apiRecipes, dbRecipes } = await fetchAndStoreRecipes(apiParams);
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
@@ -205,39 +157,14 @@ router.get("/dairy", async function (req, res, next) {
  *
  * Returns a list of breakfast recipes.
  **/
-
 router.get("/breakfast", async function (req, res, next) {
     try {
-        const response = await api.get("/recipes/complexSearch", {
-            params: {
-                type: "breakfast",
-                number: 20,
-            },
-            headers: {
-                Accept: "application/json",
-            },
-        });
+        const apiParams = {
+            type: "breakfast",
+            number: 20,
+        };
 
-        const apiRecipes = response.data.results.map((recipe) => ({
-            id: recipe.id,
-            title: recipe.title,
-            description: recipe.summary
-                ? recipe.summary
-                    .replace(/<\/?b>/g, "")
-                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
-                : "No description available",
-            image: recipe.image,
-        }));
-
-        for (const recipe of apiRecipes) {
-            await db.query(
-                `INSERT INTO recipes (id, title, description, image)
-           VALUES ($1, $2, $3, $4)`,
-                [recipe.id, recipe.title, recipe.description, recipe.image]
-            );
-        }
-
-        const dbRecipes = await db.query("SELECT * FROM recipes");
+        const { apiRecipes, dbRecipes } = await fetchAndStoreRecipes(apiParams);
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
@@ -249,46 +176,22 @@ router.get("/breakfast", async function (req, res, next) {
         return next(err);
     }
 });
+
 
 
 /** GET /recipes/maincourse => { recipes: [{ recipe1 }, { recipe2 }, ...] }
  *
- * Returns a list of breakfast recipes.
+ * Returns a list of maincourse recipes.
  **/
 
 router.get("/maincourse", async function (req, res, next) {
     try {
-        const response = await api.get("/recipes/complexSearch", {
-            params: {
-                type: "main course",
-                number: 20,
-            },
-            headers: {
-                Accept: "application/json",
-            },
-        });
+        const apiParams = {
+            type: "main course",
+            number: 20,
+        };
 
-        const apiRecipes = response.data.results.map((recipe) => ({
-            id: recipe.id,
-            title: recipe.title,
-            description: recipe.summary
-                ? recipe.summary
-                    .replace(/<\/?b>/g, "")
-                    .replace(/<\/?a(?:\s+href="([^"]+)")?>/g, "")
-                : "No description available",
-            image: recipe.image,
-        }));
-
-
-        for (const recipe of apiRecipes) {
-            await db.query(
-                `INSERT INTO recipes (id, title, description, image)
-           VALUES ($1, $2, $3, $4)`,
-                [recipe.id, recipe.title, recipe.description, recipe.image]
-            );
-        }
-
-        const dbRecipes = await db.query("SELECT * FROM recipes");
+        const { apiRecipes, dbRecipes } = await fetchAndStoreRecipes(apiParams);
 
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
@@ -300,6 +203,7 @@ router.get("/maincourse", async function (req, res, next) {
         return next(err);
     }
 });
+
 
 /** GET /recipes/:id => { recipe }
  *
