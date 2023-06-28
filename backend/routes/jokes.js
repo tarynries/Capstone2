@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/", async function (req, res, next) {
     try {
+        // Fetch jokes from the api 
         const response = await api.get("/food/jokes/random", {
             params: {
                 number: 10,
@@ -16,12 +17,12 @@ router.get("/", async function (req, res, next) {
             },
         });
 
-        console.log("response", response.data);
 
         const MAX_JOKE_LENGTH = 255;
 
         const apiJokes = [];
 
+        // Checking joke length and inserting to database
         if (response.data.jokes && response.data.jokes.length > 0) {
             for (const joke of response.data.jokes) {
                 const truncatedJoke = joke.text.substring(0, MAX_JOKE_LENGTH);
@@ -42,6 +43,7 @@ router.get("/", async function (req, res, next) {
         res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
         return res.json({ jokes });
+
     } catch (err) {
         if (err.response && err.response.status === 404) {
             throw new NotFoundError("Joke not found");
