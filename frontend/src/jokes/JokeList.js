@@ -12,12 +12,10 @@ function JokeList() {
                 return response.json();
             })
             .then((data) => {
-                console.log("Jokes data:", data);
                 if (data.jokes) {
                     setJokeList(data.jokes);
                     const randomIndex = Math.floor(Math.random() * data.jokes.length);
                     setCurrentJokeIndex(randomIndex);
-                    console.log("Updated joke list:", jokeList);
                 } else {
                 }
             })

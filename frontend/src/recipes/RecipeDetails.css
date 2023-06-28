@@ -51,16 +51,11 @@
 
 .recipe-detail .nutrition-label-container {
     text-align: left;
-    /* Align to the left side */
     margin-top: 2rem;
-    /* Adjust the margin as desired */
     font-size: 14px;
-    /* Decrease the font size */
 }
 
 .recipe-detail .nutrition-label-container .label-widget {
     width: 250px;
-    /* Adjust the width as desired */
     height: auto;
-    /* Maintain aspect ratio */
 }

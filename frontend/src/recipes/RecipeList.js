@@ -38,25 +38,6 @@ function RecipeList() {
         fetchRecipes();
     };
 
-
-    // useEffect(() => {
-    //     fetch("http://localhost:3001/recipes")
-    //         .then((response) => {
-    //             return response.json();
-    //         })
-    //         .then((data) => {
-    //             if (data.recipes) {
-    //                 setRecipes(data.recipes);
-    //             } else {
-    //                 setRecipes([]);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching recipes:", error);
-    //         });
-    // }, []);
-
-    console.log(recipes);
     return (
         <div>
             <nav className="navbar">
@@ -99,7 +80,6 @@ function RecipeList() {
                             <div key={`${recipe.id}-${index}`}>
                                 <h3>{recipe.title}</h3>
                                 <img src={recipe.image} alt={recipe.title} className="recipe-image" />
-                                {/* <p>{recipe.description}</p> */}
                                 <Link to={`/recipes/${recipe.id}`}>
                                     <button>Recipe Details</button>
                                 </Link>

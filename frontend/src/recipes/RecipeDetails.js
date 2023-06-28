@@ -57,6 +57,3 @@ function RecipeDetails() {
 
 export default RecipeDetails;
 
-
-
-{/* API has an analyze recipes link that could potentially be used for recipe instructions  */ }

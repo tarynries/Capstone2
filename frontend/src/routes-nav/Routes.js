@@ -16,14 +16,11 @@ import JokeList from "../jokes/JokeList";
  *
  */
 
-
-// could add more static data with more details to work with just front end 
 function AppRoutes() {
     const navigate = useNavigate();
 
     return (
 
-        // need to edit this piece 
         <div className="pt-5">
 
             <Routes>
