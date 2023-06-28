@@ -25,13 +25,13 @@
     Run in the front and backend using `npm test` 
 
 ## Technology Stack 
-    The front end was built using React. The backend was built using Node.js and PostgreSQL was used for the database. 
+```The front end was built using React. The backend was built using Node.js and PostgreSQL was used for the database.```
 
 ## Website desciption
-   Evolution Recipe Planning allows visitors to browse through recipes generally as well as based on categories or specific search. Visitors can then view specific breakdowns of each individual recipe including description, instructions, ingredients, and nutrition facts. Visitors can also create a shopping list that saves in local storage so they are able to add and remove as they shop. Lastly visitors can browse through food jokes. 
+```Evolution Recipe Planning allows visitors to browse through recipes generally as well as based on categories or specific search. Visitors can then view specific breakdowns of each individual recipe including description, instructions, ingredients, and nutrition facts. Visitors can also create a shopping list that saves in local storage so they are able to add and remove as they shop. Lastly visitors can browse through food jokes.``` 
 
 ## User flow
-    Users start on the homepage which provides links to recipes, shopping list, and jokes. From the recipes link users will see a page with a large group of recipes. This page also includes a search bar and links to gluten free recipes, dairy free recipes, breakfast recipes, and main course recipes. Once a recipe is chosen and clicked on it will display a detailed breakdown of that recipe. Returning to the homepage when users visit the shopping list page they will see a place to add to the shopping list and once an item is added it provides the option to remove it for example after a user has purchased this item. Lastly returning to the homepage and following the link to the jokes page users will see one joke displayed at a time and a button that allows clicking through different food jokes. 
+```Users start on the homepage which provides links to recipes, shopping list, and jokes. From the recipes link users will see a page with a large group of recipes. This page also includes a search bar and links to gluten free recipes, dairy free recipes, breakfast recipes, and main course recipes. Once a recipe is chosen and clicked on it will display a detailed breakdown of that recipe. Returning to the homepage when users visit the shopping list page they will see a place to add to the shopping list and once an item is added it provides the option to remove it for example after a user has purchased this item. Lastly returning to the homepage and following the link to the jokes page users will see one joke displayed at a time and a button that allows clicking through different food jokes.```
 
 
 
