@@ -23,7 +23,8 @@ function RecipeList() {
             })
             .then((data) => {
                 if (data.recipes) {
-                    setRecipes(data.recipes.slice(0, 200));
+                    const uniqueRecipes = removeDuplicates(data.recipes, "id");
+                    setRecipes(uniqueRecipes.slice(0, 200));
                 } else {
                     setRecipes([]);
                 }
@@ -31,6 +32,16 @@ function RecipeList() {
             .catch((error) => {
                 console.error("Error fetching recipes:", error);
             });
+    };
+
+    const removeDuplicates = (array, key) => {
+        return array.reduce((acc, item) => {
+            const existingItem = acc.find((el) => el[key] === item[key]);
+            if (!existingItem) {
+                return acc.concat(item);
+            }
+            return acc;
+        }, []);
     };
 
     const handleSearch = (e) => {
