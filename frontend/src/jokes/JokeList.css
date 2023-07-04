@@ -48,3 +48,12 @@
 .joke-list-title {
     text-align: center;
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.joke-button {
+    margin-right: 10px;
+}

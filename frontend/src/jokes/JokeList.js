@@ -28,6 +28,10 @@ function JokeList() {
         setCurrentJokeIndex((prevIndex) => prevIndex + 1);
     };
 
+    const handlePreviousJoke = () => {
+        setCurrentJokeIndex((prevIndex) => prevIndex - 1);
+    };
+
     return (
         <div>
             <h2 className="joke-list-title">Jokes</h2>
@@ -40,9 +44,14 @@ function JokeList() {
                 ) : (
                     <p>No jokes found.</p>
                 )}
-                <button className="joke-button" onClick={handleNextJoke}>
-                    Next Joke
-                </button>
+                <div className="button-container">
+                    <button className="joke-button" onClick={handlePreviousJoke}>
+                        Back
+                    </button>
+                    <button className="joke-button" onClick={handleNextJoke}>
+                        Next
+                    </button>
+                </div>
                 <br />
                 <Link to="/">
                     <button className="joke-button">Homepage</button>
