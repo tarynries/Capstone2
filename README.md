@@ -1,7 +1,7 @@
 # Evolution Recipe Planning App
 
 ## Link to application
-*insert link here once deployed*
+    https://meal-planning-fe.onrender.com/
 
 ## API Link:
     https://spoonacular.com/food-api
